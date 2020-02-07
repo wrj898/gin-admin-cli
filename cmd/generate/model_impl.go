@@ -8,7 +8,7 @@ import (
 )
 
 func getModelImplFileName(dir, name string) string {
-	fullname := fmt.Sprintf("%s/internal/app/model/impl/gorm/internal/model/m_%s.go", dir, util.ToLowerUnderlinedNamer(name))
+	fullname := fmt.Sprintf("%s/model/m_%s.go", dir, util.ToLowerUnderlinedNamer(name))
 	return fullname
 }
 
@@ -43,16 +43,11 @@ package model
 import (
 	"context"
 
-	"{{.PkgName}}/internal/app/errors"
-	"{{.PkgName}}/internal/app/model/impl/gorm/internal/entity"
-	"{{.PkgName}}/internal/app/schema"
+	"{{.PkgName}}/errors"
+	"{{.PkgName}}/model/entity"
+	"{{.PkgName}}/schema"
 	"github.com/jinzhu/gorm"
 )
-
-// New{{.Name}} 创建{{.Comment}}存储实例
-func New{{.Name}}(db *gorm.DB) *{{.Name}} {
-	return &{{.Name}}{db}
-}
 
 // {{.Name}} {{.Comment}}存储
 type {{.Name}} struct {
@@ -70,7 +65,7 @@ func (a *{{.Name}}) getQueryOption(opts ...schema.{{.Name}}QueryOptions) schema.
 // Query 查询数据
 func (a *{{.Name}}) Query(ctx context.Context, params schema.{{.Name}}QueryParam, opts ...schema.{{.Name}}QueryOptions) (*schema.{{.Name}}QueryResult, error) {
 	opt := a.getQueryOption(opts...)
-	db := entity.Get{{.Name}}DB(ctx, a.db)
+	db := entity.Get{{.Name}}DB(ctx, DB)
 	// TODO: 查询条件
 	db = db.Order("id DESC")
 
@@ -89,7 +84,7 @@ func (a *{{.Name}}) Query(ctx context.Context, params schema.{{.Name}}QueryParam
 
 // Get 查询指定数据
 func (a *{{.Name}}) Get(ctx context.Context, recordID string, opts ...schema.{{.Name}}QueryOptions) (*schema.{{.Name}}, error) {
-	db := entity.Get{{.Name}}DB(ctx, a.db).Where("record_id=?", recordID)
+	db := entity.Get{{.Name}}DB(ctx, DB).Where("record_id=?", recordID)
 	var item entity.{{.Name}}
 	ok, err := FindOne(ctx, db, &item)
 	if err != nil {
@@ -104,7 +99,7 @@ func (a *{{.Name}}) Get(ctx context.Context, recordID string, opts ...schema.{{.
 // Create 创建数据
 func (a *{{.Name}}) Create(ctx context.Context, item schema.{{.Name}}) error {
 	eitem := entity.Schema{{.Name}}(item).To{{.Name}}()
-	result := entity.Get{{.Name}}DB(ctx, a.db).Create(eitem)
+	result := entity.Get{{.Name}}DB(ctx, DB).Create(eitem)
 	if err := result.Error; err != nil {
 		return errors.WithStack(err)
 	}
@@ -114,7 +109,7 @@ func (a *{{.Name}}) Create(ctx context.Context, item schema.{{.Name}}) error {
 // Update 更新数据
 func (a *{{.Name}}) Update(ctx context.Context, recordID string, item schema.{{.Name}}) error {
 	eitem := entity.Schema{{.Name}}(item).To{{.Name}}()
-	result := entity.Get{{.Name}}DB(ctx, a.db).Where("record_id=?", recordID).Omit("record_id").Updates(eitem)
+	result := entity.Get{{.Name}}DB(ctx, DB).Where("record_id=?", recordID).Omit("record_id").Updates(eitem)
 	if err := result.Error; err != nil {
 		return errors.WithStack(err)
 	}
@@ -123,7 +118,7 @@ func (a *{{.Name}}) Update(ctx context.Context, recordID string, item schema.{{.
 
 // Delete 删除数据
 func (a *{{.Name}}) Delete(ctx context.Context, recordID string) error {
-	result := entity.Get{{.Name}}DB(ctx, a.db).Where("record_id=?", recordID).Delete(entity.{{.Name}}{})
+	result := entity.Get{{.Name}}DB(ctx, DB).Where("record_id=?", recordID).Delete(entity.{{.Name}}{})
 	if err := result.Error; err != nil {
 		return errors.WithStack(err)
 	}

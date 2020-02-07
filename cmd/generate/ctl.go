@@ -29,7 +29,7 @@ const (
 )
 
 func getCtlFileName(dir, routerName, name string) string {
-	fullname := fmt.Sprintf("%s/internal/app/routers/%s/ctl/c_%s.go", dir, routerName, util.ToLowerUnderlinedNamer(name))
+	fullname := fmt.Sprintf("%s/routers/api/ctl/c_%s.go", dir, util.ToLowerUnderlinedNamer(name))
 	return fullname
 }
 
@@ -71,22 +71,16 @@ const ctlTpl = `
 package ctl
 
 import (
-	"{{.PkgName}}/internal/app/bll"
-	"{{.PkgName}}/internal/app/ginplus"
-	"{{.PkgName}}/internal/app/schema"
+	"{{.PkgName}}/bll"
+	"{{.PkgName}}/ginplus"
+	"{{.PkgName}}/schema"
 	"github.com/gin-gonic/gin"
 )
 
-// New{{.Name}} 创建{{.Comment}}控制器
-func New{{.Name}}(b{{.Name}} bll.I{{.Name}}) *{{.Name}} {
-	return &{{.Name}}{
-		{{.Name}}Bll: b{{.Name}},
-	}
-}
 
 // {{.Name}} {{.Comment}}控制器
 type {{.Name}} struct {
-	{{.Name}}Bll bll.I{{.Name}}
+	{{.Name}}Bll bll.{{.Name}}
 }
 
 // Query 查询数据
@@ -209,18 +203,11 @@ const ctlTBTpl = `
 package ctl
 
 import (
-	"{{.PkgName}}/internal/app/bll"
-	"{{.PkgName}}/internal/app/ginplus"
-	"{{.PkgName}}/internal/app/schema"
+	"{{.PkgName}}/bll"
+	"{{.PkgName}}/ginplus"
+	"{{.PkgName}}/schema"
 	"github.com/gin-gonic/gin"
 )
-
-// New{{.Name}} 创建{{.Comment}}控制器
-func New{{.Name}}(b{{.Name}} bll.I{{.Name}}) *{{.Name}} {
-	return &{{.Name}}{
-		{{.Name}}Bll: b{{.Name}},
-	}
-}
 
 // {{.Name}} {{.Comment}}
 // @Name {{.Name}}

@@ -8,7 +8,7 @@ import (
 )
 
 func getBllImplFileName(dir, name string) string {
-	fullname := fmt.Sprintf("%s/internal/app/bll/impl/internal/b_%s.go", dir, util.ToLowerUnderlinedNamer(name))
+	fullname := fmt.Sprintf("%s/bll/b_%s.go", dir, util.ToLowerUnderlinedNamer(name))
 	return fullname
 }
 
@@ -37,27 +37,21 @@ func genBllImpl(ctx context.Context, pkgName, dir, name, comment string) error {
 }
 
 const bllImplTpl = `
-package internal
+package bll
 
 import (
 	"context"
 
-	"{{.PkgName}}/internal/app/errors"
-	"{{.PkgName}}/internal/app/model"
-	"{{.PkgName}}/internal/app/schema"
+	"{{.PkgName}}/errors"
+	"{{.PkgName}}/model"
+	"{{.PkgName}}/schema"
 	"{{.PkgName}}/pkg/util"
 )
 
-// New{{.Name}} 创建{{.Comment}}
-func New{{.Name}}(m{{.Name}} model.I{{.Name}}) *{{.Name}} {
-	return &{{.Name}}{
-		{{.Name}}Model: m{{.Name}},
-	}
-}
 
 // {{.Name}} {{.Comment}}业务逻辑
 type {{.Name}} struct {
-	{{.Name}}Model model.I{{.Name}}
+	{{.Name}}Model model.{{.Name}}
 }
 
 // Query 查询数据

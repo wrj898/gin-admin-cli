@@ -41,8 +41,7 @@ package bll
 
 import (
 	"context"
-
-	"{{.PkgName}}/internal/app/schema"
+	"{{.PkgName}}/schema"
 )
 
 // I{{.Name}} {{.Comment}}业务逻辑接口

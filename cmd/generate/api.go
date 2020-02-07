@@ -9,7 +9,7 @@ import (
 )
 
 func getAPIFileName(dir, routerName string) string {
-	fullname := fmt.Sprintf("%s/internal/app/routers/%s/%s.go", dir, routerName, routerName)
+	fullname := fmt.Sprintf("%s/routers/%s/%s.go", dir, routerName, routerName)
 	return fullname
 }
 
@@ -17,7 +17,7 @@ func getAPIFileName(dir, routerName string) string {
 func insertAPI(ctx context.Context, pkgName, dir, routerName, name, comment string) error {
 	fullname := getAPIFileName(dir, routerName)
 
-	injectContent := fmt.Sprintf("c%s *ctl.%s,", name, name)
+	injectContent := fmt.Sprintf("c%s ctl.%s", name, name)
 	pname := util.ToPlural(util.ToLowerUnderlinedNamer(name))
 	pname = strings.Replace(pname, "_", "-", -1)
 	apiContent, err := execParseTpl(apiTpl, map[string]string{
@@ -32,12 +32,12 @@ func insertAPI(ctx context.Context, pkgName, dir, routerName, name, comment stri
 	var injectStart, apiStart int
 	apiStack := -1
 	insertFn := func(line string) (data string, flag int, ok bool) {
-		if injectStart == 0 && strings.Contains(line, "container.Invoke") {
+		if injectStart == 0 && strings.Contains(line, "var (") {
 			injectStart = 1
 			return
 		}
 
-		if injectStart == 1 && strings.Contains(line, "error") {
+		if injectStart == 1 && strings.Contains(line, ") //declare end") {
 			injectStart = -1
 			data = injectContent
 			flag = -1

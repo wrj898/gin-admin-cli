@@ -95,30 +95,30 @@ func (a *Command) Exec() error {
 		err = genModelImpl(ctx, pkgName, dir, item.StructName, item.Comment)
 		a.handleError(err, "生成mode impl")
 
-		err = genModel(ctx, pkgName, dir, item.StructName, item.Comment)
-		a.handleError(err, "生成model")
+		//err = genModel(ctx, pkgName, dir, item.StructName, item.Comment)
+		//a.handleError(err, "生成model")
 
-		err = insertModelInject(ctx, pkgName, dir, item.StructName, item.Comment)
-		a.handleError(err, "生成model inject")
+		//err = insertModelInject(ctx, pkgName, dir, item.StructName, item.Comment)
+		//a.handleError(err, "生成model inject")
 	}
 
 	if a.hasModule("bll") {
 		err = genBllImpl(ctx, pkgName, dir, item.StructName, item.Comment)
 		a.handleError(err, "生成bll impl")
 
-		err = genBll(ctx, pkgName, dir, item.StructName, item.Comment)
-		a.handleError(err, "生成bll")
-
-		err = insertBllInject(ctx, pkgName, dir, item.StructName, item.Comment)
-		a.handleError(err, "生成bll inject")
+		//err = genBll(ctx, pkgName, dir, item.StructName, item.Comment)
+		//a.handleError(err, "生成bll")
+		//
+		//err = insertBllInject(ctx, pkgName, dir, item.StructName, item.Comment)
+		//a.handleError(err, "生成bll inject")
 	}
 
 	if a.hasModule("router") {
 		err = genCtl(ctx, pkgName, dir, routerName, item.StructName, item.Comment, NewCTLTplType(a.cfg.CtlTpl))
 		a.handleError(err, "生成ctl")
 
-		err = insertCtlInject(ctx, pkgName, dir, routerName, item.StructName, item.Comment)
-		a.handleError(err, "生成ctl inject")
+		//err = insertCtlInject(ctx, pkgName, dir, routerName, item.StructName, item.Comment)
+		//a.handleError(err, "生成ctl inject")
 
 		err = insertAPI(ctx, pkgName, dir, routerName, item.StructName, item.Comment)
 		a.handleError(err, "生成api")
